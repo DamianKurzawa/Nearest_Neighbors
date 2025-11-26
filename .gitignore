@@ -50,5 +50,11 @@ MANIFEST
 
 # Per-project virtualenvs
 .venv*/
+venv/
+.venv/
 .conda*/
 .python-version
+
+# Windows system files
+desktop.ini
+Thumbs.db
