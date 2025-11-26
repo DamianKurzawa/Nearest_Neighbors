@@ -34,10 +34,67 @@ my_knn_project
 ==============
 
 
-    Add a short description here!
+    Implementation and Analysis of the k-NN Algorithm
 
 
-A longer description of your project goes here...
+This project focuses on creating a custom implementation of the k-Nearest Neighbors (k-NN) algorithm without using ready-made solutions from libraries such as scikit-learn. The goal was to understand the algorithm from the ground up, compare it with an existing implementation, and prepare a full set of tests validating correctness.
+
+The project includes an implementation of the SimpleKNN class, which supports different neighbor search strategies (brute-force, kd-tree, ball-tree), multiple distance metrics, and configuration parameters that mimic the behavior of a real-world k-NN model.
+
+The input dataset is processed, split into training and testing sets, and used to compare the performance of the custom model with scikit-learn's implementation. The project also contains unit tests and consistency tests across different search strategies.
+
+Project Scope
+This project covers the following:
+1. Custom k-NN Implementation
+•	A fully implemented SimpleKNN class,
+•	Support for parameters such as:
+o	n_neighbors,
+o	weights (uniform/distance),
+o	metric (e.g., euclidean, manhattan),
+o	leaf_size,
+o	algorithm (brute, kd_tree, ball_tree),
+•	Implementation of predict and predict_proba,
+•	Manual construction of kd-tree and ball-tree structures.
+2. Comparison with scikit-learn
+•	Parameter tuning using GridSearchCV on the reference model,
+•	Comparison of predictions in terms of:
+o	accuracy,
+o	ROC curve and AUC score,
+o	prediction time,
+o	classification consistency.
+3. Unit Tests
+Located in the tests/ directory:
+•	tests for core class methods (fit, predict, predict_proba),
+•	tests for brute-force vs kd-tree vs ball-tree behavior,
+•	tests verifying dataset integrity after preprocessing,
+•	tests comparing results with scikit-learn,
+•	performance and stress tests.
+4. PyScaffold-Based Structure
+The project was generated using PyScaffold, providing:
+•	a standardized project layout,
+•	configuration files,
+•	pytest integration,
+•	documentation structure in the docs/ directory.
+________________________________________
+Results and Conclusions
+The custom k-NN implementation produces results very close to the scikit-learn version.
+Small differences may occur due to:
+•	simplified kd-tree and ball-tree implementations,
+•	different tie-breaking approaches,
+•	optimizations used internally by scikit-learn.
+Overall, the project provides a deeper understanding of the k-NN algorithm, the computational cost of nearest-neighbor search, and the role of data structures in accelerating the algorithm.
+
+
+How to Run the Project
+1. Create and activate a virtual environment:
+   python -m venv venv
+   venv\Scripts\activate
+2. Install dependencies:
+   pip install -r requirements.txt
+3. Run the main script:
+   python src/my_knn_project/main_knn.py
+4. To run tests:
+   pytest -v
 
 
 .. _pyscaffold-notes:
