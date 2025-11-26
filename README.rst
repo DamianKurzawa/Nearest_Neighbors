@@ -78,6 +78,27 @@ Small differences may occur due to:
 
 Overall, the project provides a deeper understanding of the k-NN algorithm, the computational cost of nearest-neighbor search, and the role of data structures in accelerating the algorithm.
 
+How to Run the Project
+=======================
+
+1. Create and activate a virtual environment
+-----------------------------
+
+python -m venv venv
+
+venv\Scripts\activate
+
+2. Install dependencies
+-----------------------------
+pip install -r requirements.txt
+
+3. Run the main script
+-----------------------------
+python src/my_knn_project/main_knn.py
+
+4. To run tests
+-----------------------------
+pytest -v
 
 .. _pyscaffold-notes:
 
