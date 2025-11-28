@@ -1,4 +1,4 @@
-# test_dataset_knn.py
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -9,9 +9,15 @@ from sklearn.neighbors import KNeighborsClassifier
 
 from my_knn_project.simple_knn import SimpleKNN
 
+import os
+
 @pytest.fixture(scope="module")
 def preprocessed_data():
-    dataset = pd.read_csv('src/my_knn_project/dataset.csv')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_dir)
+    dataset_path = os.path.join(project_root, 'src', 'my_knn_project', 'dataset.csv')
+    
+    dataset = pd.read_csv(dataset_path)
 
     dataset['TotalCharges'] = dataset['TotalCharges'].replace(" ", np.nan).astype(float)
     dataset['SeniorCitizen'] = dataset['SeniorCitizen'].astype(bool)
