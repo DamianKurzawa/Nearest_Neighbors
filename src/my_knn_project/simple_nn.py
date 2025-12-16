@@ -4,12 +4,30 @@ from sklearn.base import BaseEstimator
 
 class KDTree:
     def __init__(self, X, leaf_size=30):
+        """Initializes the KD Tree.
+
+        Args:
+            X (array-like): Training data.
+            leaf_size (int, optional): Maximum leaf size. Defaults to 30.
+        """
         self.leaf_size = leaf_size
+        self.data = np.asarray(X)
+        self.n_features = self.data.shape[1]
+        self.tree = self._build_tree(np.arange(len(self.data)), depth=0)
         self.data = np.asarray(X)
         self.n_features = self.data.shape[1]
         self.tree = self._build_tree(np.arange(len(self.data)), depth=0)
 
     def _build_tree(self, idx_array, depth):
+        """Builds the KD Tree recursively.
+
+        Args:
+            idx_array (array): Indices of points to include.
+            depth (int): Current depth in the tree.
+
+        Returns:
+            dict: Tree node.
+        """
         if len(idx_array) == 0:
             return None
         if len(idx_array) <= self.leaf_size:
@@ -33,6 +51,16 @@ class KDTree:
         }
 
     def query(self, x, k, dist_fn):
+        """Finds k nearest neighbors for point x.
+
+        Args:
+            x (array): Query point.
+            k (int): Number of neighbors to find.
+            dist_fn (callable): Distance function.
+
+        Returns:
+            list: List of k nearest neighbors with distances.
+        """
         x = np.asarray(x).ravel()
         best = []
 
@@ -77,11 +105,25 @@ class KDTree:
 
 class BallTree:
     def __init__(self, X, leaf_size=30):
+        """Initializes the Ball Tree.
+
+        Args:
+            X (array-like): Training data.
+            leaf_size (int, optional): Maximum leaf size. Defaults to 30.
+        """
         self.leaf_size = leaf_size
         self.data = np.asarray(X)
         self.tree = self._build_tree(np.arange(len(self.data)))
 
     def _build_tree(self, idx_array):
+        """Builds the Ball Tree recursively.
+
+        Args:
+            idx_array (array): Indices of points to include.
+
+        Returns:
+            dict: Tree node.
+        """
         if len(idx_array) == 0:
             return None
         if len(idx_array) <= self.leaf_size:
@@ -110,6 +152,16 @@ class BallTree:
         }
 
     def query(self, x, k, dist_fn):
+        """Finds k nearest neighbors for point x.
+
+        Args:
+            x (array): Query point.
+            k (int): Number of neighbors to find.
+            dist_fn (callable): Distance function.
+
+        Returns:
+            list: List of k nearest neighbors with distances.
+        """
         x = np.asarray(x).ravel()
         best = []
 
@@ -157,7 +209,17 @@ class SimpleNearestNeighbors(BaseEstimator):
                  metric="minkowski",
                  p=2,
                  exclude_self=False):
+        """Initializes SimpleNearestNeighbors.
 
+        Args:
+            n_neighbors (int, optional): Number of neighbors. Defaults to 5.
+            radius (float, optional): Radius for radius_neighbors. Defaults to 1.0.
+            algorithm (str, optional): Algorithm ('brute', 'kd_tree', 'ball_tree'). Defaults to 'brute'.
+            leaf_size (int, optional): Leaf size for trees. Defaults to 30.
+            metric (str, optional): Distance metric. Defaults to 'minkowski'.
+            p (int, optional): Parameter for minkowski. Defaults to 2.
+            exclude_self (bool, optional): Whether to exclude the point itself. Defaults to False.
+        """
         self.n_neighbors = n_neighbors
         self.radius = radius
         self.algorithm = algorithm
@@ -171,6 +233,15 @@ class SimpleNearestNeighbors(BaseEstimator):
 
 
     def _dist(self, A, b):
+        """Computes distance between points A and b using the specified metric.
+
+        Args:
+            A (array): First set of points.
+            b (array): Second point.
+
+        Returns:
+            array: Distances.
+        """
         if self.metric == "euclidean":
             return np.sqrt(((A - b) ** 2).sum(axis=1))
         elif self.metric == "manhattan":
@@ -184,6 +255,14 @@ class SimpleNearestNeighbors(BaseEstimator):
 
 
     def fit(self, X):
+        """Fits the model with training data.
+
+        Args:
+            X (array-like): Training data.
+
+        Returns:
+            self: Fitted estimator.
+        """
         self.X_train = np.asarray(X)
 
         if self.algorithm == "kd_tree":
@@ -197,6 +276,16 @@ class SimpleNearestNeighbors(BaseEstimator):
 
 
     def kneighbors(self, X_query, n_neighbors=None, return_distance=True):
+        """Finds the k-neighbors of a point.
+
+        Args:
+            X_query (array-like): Query points.
+            n_neighbors (int, optional): Number of neighbors. Defaults to self.n_neighbors.
+            return_distance (bool, optional): Whether to return distances. Defaults to True.
+
+        Returns:
+            tuple or array: Distances and indices if return_distance, else indices.
+        """
         X_query = np.asarray(X_query)
         if n_neighbors is None:
             n_neighbors = self.n_neighbors
@@ -241,13 +330,23 @@ class SimpleNearestNeighbors(BaseEstimator):
         indices_all = np.vstack(indices_all)
 
         return (distances_all, indices_all) if return_distance else indices_all
-    
+ 
  
     def radius_neighbors(self, X_query, radius=None, return_distance=True):
+        """Finds neighbors within a given radius.
+
+        Args:
+            X_query (array-like): Query points.
+            radius (float, optional): Radius. Defaults to self.radius.
+            return_distance (bool, optional): Whether to return distances. Defaults to True.
+
+        Returns:
+            tuple or list: Distances and indices if return_distance, else indices.
+        """
         X_query = np.asarray(X_query)
         if radius is None:
-            radius = self.radius
-
+            radius = self.radius        
+            
         results_idx = []
         results_dist = []
 

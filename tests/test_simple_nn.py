@@ -5,9 +5,6 @@ from sklearn.neighbors import NearestNeighbors
 from my_knn_project.simple_nn import SimpleNearestNeighbors
 
 
-# ---------------------------------------------------------
-# Fixtures
-# ---------------------------------------------------------
 
 @pytest.fixture
 def small_dataset():
