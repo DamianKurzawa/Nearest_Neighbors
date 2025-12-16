@@ -131,6 +131,22 @@ How to Run the Project
    pytest -v
 
 
+Documentation
+-------------------------------
+
+- SimpleNearestNeighbors(
+    n_neighbors=5,
+    radius=1.0,
+    algorithm="brute",
+    leaf_size=30,
+    metric="minkowski",
+    p=2,
+    exclude_self=False)
+- fit(X) - Stores the training dataset and builds the selected data structure (KD-tree or Ball-tree).
+- kneighbors(X_query, n_neighbors, return_distance=True) - Finds the k closest points to each query sample. Returns: distances to neighbors, indices of neighbors in the training dataset.
+- radius_neighbors(X_query, radius, return_distance=True) - Finds all points within a given radius. Unlike kneighbors, the number of returned neighbors: may vary per query, may be zero or very large.
+
+
 Notes
 =====
 
