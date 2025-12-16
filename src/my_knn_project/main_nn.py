@@ -4,15 +4,18 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import NearestNeighbors
+from pathlib import Path
 
-from simple_nn import SimpleNearestNeighbors
+from .simple_nn import SimpleNearestNeighbors
+from .visualize_nn import visualize_k_vs_radius, visualize_metrics_nn
 
 __author__ = "Damian"
 __license__ = "MIT"
 
 
-def preprocess_dataset(path="./dataset.csv"):
+def preprocess_dataset():
     """Wczytanie, czyszczenie i kodowanie danych."""
+    path = Path(__file__).parent / "dataset.csv"
     dataset = pd.read_csv(path)
     print("Dataset loaded successfully.")
 
@@ -62,10 +65,11 @@ def compare_nearest_neighbors(X_train, X_test):
     # --- Twoja implementacja ---
     my_nn = SimpleNearestNeighbors(
         n_neighbors=n_neighbors,
-        algorithm="ball_tree",
-        metric="euclidean",
+        algorithm="kd_tree",
+        metric="minkowski",
         leaf_size=20,
-        exclude_self=False
+        exclude_self=False,
+        p=3
     )
     my_nn.fit(X_train)
 
@@ -78,9 +82,10 @@ def compare_nearest_neighbors(X_train, X_test):
     # --- sklearn ---
     sk_nn = NearestNeighbors(
         n_neighbors=n_neighbors,
-        algorithm="ball_tree",
-        metric="euclidean",
-        leaf_size=20
+        algorithm="kd_tree",
+        metric="minkowski",
+        leaf_size=20,
+        p=3
     )
     sk_nn.fit(X_train)
 
@@ -100,6 +105,8 @@ def main():
     )
 
     compare_nearest_neighbors(X_train, X_test)
+    visualize_k_vs_radius(X_train)
+    visualize_metrics_nn(X_train)
 
 
 if __name__ == "__main__":
