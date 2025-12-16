@@ -1,5 +1,5 @@
 ==============
-my_nn_project
+Nearest_Neighbors Project
 ==============
 
 Implementation and Analysis of the Nearest Neighbors Algorithm
