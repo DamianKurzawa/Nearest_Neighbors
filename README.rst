@@ -1,109 +1,154 @@
 ==============
-my_knn_project
+Nearest_Neighbors Project
 ==============
 
-Implementation and Analysis of the k-NN Algorithm
-================================================
+Implementation and Analysis of the Nearest Neighbors Algorithm
+==============================================================
 
-This project focuses on creating a custom implementation of the k-Nearest Neighbors (k-NN) algorithm without using ready-made solutions from libraries such as scikit-learn. The goal was to understand the algorithm from the ground up, compare it with an existing implementation, and prepare a full set of tests validating correctness.
+This project focuses on creating a custom implementation of the **Nearest Neighbors (NN)** algorithm without using ready-made solutions from libraries such as scikit-learn.  
+The main goal is to understand how nearest neighbor search works internally, how different search strategies affect performance, and how distance metrics influence neighbor selection.
 
-The project includes an implementation of the SimpleKNN class, which supports different neighbor search strategies (brute-force, kd-tree, ball-tree), multiple distance metrics, and configuration parameters that mimic the behavior of a real-world k-NN model.
+Unlike k-NN classification, this project implements **pure nearest neighbor search**, meaning that the algorithm only finds the closest points in the dataset without assigning class labels.
 
-The input dataset is processed, split into training and testing sets, and used to compare the performance of the custom model with scikit-learn's implementation. The project also contains unit tests and consistency tests across different search strategies.
+The project includes a full implementation of a ``SimpleNearestNeighbors`` class and a direct comparison with ``sklearn.neighbors.NearestNeighbors``. The implementation is validated using unit tests and visualizations.
 
 
 Project Scope
 =============
 
-1. Custom k-NN Implementation
------------------------------
+1. Custom Nearest Neighbors Implementation
+------------------------------------------
 
 The project includes:
 
-- A fully implemented ``SimpleKNN`` class,
+- A fully implemented ``SimpleNearestNeighbors`` class,
 - Support for parameters such as:
-  - ``n_neighbors``,
-  - ``weights`` (``uniform`` or ``distance``),
-  - ``metric`` (e.g. euclidean, manhattan),
-  - ``leaf_size``,
+  - ``n_neighbors`` – number of nearest neighbors,
+  - ``radius`` – distance threshold for radius-based search,
+  - ``metric`` (``euclidean``, ``manhattan``, ``minkowski``),
+  - ``p`` – Minkowski distance parameter,
+  - ``leaf_size`` – tree leaf size,
   - ``algorithm`` (``brute``, ``kd_tree``, ``ball_tree``),
-- Implementation of ``predict`` and ``predict_proba``,
-- Manual construction of kd-tree and ball-tree structures.
+  - ``exclude_self`` – option to ignore the query point itself,
+- Implementation of:
+  - ``fit``,
+  - ``kneighbors``,
+  - ``radius_neighbors``,
+- Manual construction of **KD-tree** and **Ball-tree** data structures.
 
 
 2. Comparison with scikit-learn
 -------------------------------
 
-- Parameter tuning using ``GridSearchCV`` on the reference model,
-- Comparison of predictions in terms of:
-  - accuracy,
-  - ROC curve and AUC score,
-  - prediction time,
-  - classification consistency.
+The custom implementation is compared with
+``sklearn.neighbors.NearestNeighbors`` in terms of:
+
+- returned distances,
+- returned neighbor indices,
+- consistency across different algorithms,
+- behavior of ``kneighbors`` vs ``radius_neighbors``.
+
+The comparison demonstrates that the custom implementation produces identical or very similar results to the reference implementation.
 
 
 3. Unit Tests
 -------------
 
-Tests are located in the ``tests/`` directory:
+Tests are located in the ``tests/`` directory and include:
 
-- tests for core class methods (``fit``, ``predict``, ``predict_proba``),
-- tests for brute-force vs kd-tree vs ball-tree behavior,
-- tests verifying dataset integrity after preprocessing,
+- tests for core methods (``fit``, ``kneighbors``, ``radius_neighbors``),
+- tests verifying correct handling of ``exclude_self``,
+- tests checking output shapes and distance ordering,
 - tests comparing results with scikit-learn,
-- performance and stress tests.
+- edge-case and consistency tests.
+
+All tests are executed using ``pytest``.
 
 
 4. PyScaffold-Based Structure
 -----------------------------
 
-The project was generated using PyScaffold, providing:
+The project was generated using **PyScaffold**, providing:
 
-- standardized project layout,
-- configuration files,
-- pytest integration,
+- a standardized project layout,
+- configuration files (``setup.cfg``, ``pyproject.toml``),
+- pytest and coverage integration,
 - documentation structure in the ``docs/`` directory.
 
 
 Results and Conclusions
 =======================
 
-The custom k-NN implementation produces results very close to the scikit-learn version.
+The custom Nearest Neighbors implementation produces results that closely match those of scikit-learn.
 
 Small differences may occur due to:
 
-- simplified kd-tree and ball-tree implementations,
-- different tie-breaking approaches,
-- scikit-learn internal optimizations.
+- simplified KD-tree and Ball-tree implementations,
+- different traversal orders,
+- lack of low-level optimizations present in scikit-learn.
 
-Overall, the project provides a deeper understanding of the k-NN algorithm, the computational cost of nearest-neighbor search, and the role of data structures in accelerating the algorithm.
+Overall, the project provides a deeper understanding of:
+
+- nearest neighbor search algorithms,
+- distance metrics and their impact,
+- tree-based acceleration methods,
+- differences between k-NN classification and pure nearest neighbor search.
+
 
 How to Run the Project
-=======================
+=====================
 
 1. Create and activate a virtual environment
------------------------------
+--------------------------------------------
 
-python -m venv venv
+.. code-block:: bash
 
-venv\Scripts\activate
+   python -m venv venv
+   venv\Scripts\activate
+
 
 2. Install dependencies
------------------------------
-pip install -r requirements.txt
+-----------------------
+
+.. code-block:: bash
+
+   pip install -r requirements.txt
+
 
 3. Run the main script
------------------------------
-python src/my_knn_project/main_knn.py
+---------------------
 
-4. To run tests
------------------------------
-pytest -v
+.. code-block:: bash
 
-.. _pyscaffold-notes:
+   python -m my_knn_project.main_nn
+
+
+4. Run tests
+------------
+
+.. code-block:: bash
+
+   pytest -v
+
+
+Documentation
+-------------------------------
+
+- SimpleNearestNeighbors(
+    n_neighbors=5,
+    radius=1.0,
+    algorithm="brute",
+    leaf_size=30,
+    metric="minkowski",
+    p=2,
+    exclude_self=False)
+- fit(X) - Stores the training dataset and builds the selected data structure (KD-tree or Ball-tree).
+- kneighbors(X_query, n_neighbors, return_distance=True) - Finds the k closest points to each query sample. Returns: distances to neighbors, indices of neighbors in the training dataset.
+- radius_neighbors(X_query, radius, return_distance=True) - Finds all points within a given radius. Unlike kneighbors, the number of returned neighbors: may vary per query, may be zero or very large.
+
 
 Notes
 =====
 
-This project has been set up using PyScaffold 4.6.  
+This project has been set up using **PyScaffold 4.6**.  
 For details and usage information on PyScaffold see https://pyscaffold.org/.
